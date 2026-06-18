@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — Edit Your Hotel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/[email protected]/dist/tabler-icons.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f4f5f7;
+      color: #2c2c2c;
+      line-height: 1.5;
+    }
+    .admin-header {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .admin-header h1 { font-size: 18px; font-weight: 600; }
+    .admin-header .actions { display: flex; gap: 10px; }
+    .btn-admin {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: #b8924a; color: #fff; }
+    .btn-primary:hover { background: #8a6d37; }
+    .btn-secondary { background: #444; color: #fff; }
+    .btn-secondary:hover { background: #666; }
+    .btn-danger { background: #c0392b; color: #fff; }
+    .btn-success { background: #27ae60; color: #fff; }
+    
+    .container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    
+    .alert {
+      padding: 12px 18px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: none;
+    }
+    .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .alert-info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 6px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .tab {
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      color: #666;
+    }
+    .tab.active { background: #1a1a1a; color: #fff; }
+    
+    .panel {
+      background: #fff;
+      border-radius: 8px;
+      padding: 30px;
+      display: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .panel.active { display: block; }
+    .panel h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .form-row.single { grid-template-columns: 1fr; }
+    
+    .field { margin-bottom: 16px; }
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .field input:focus,
+    .field textarea:focus { outline: none; border-color: #b8924a; }
+    .field textarea { resize: vertical; min-height: 90px; }
+    .field .hint { font-size: 11px; color: #999; margin-top: 4px; }
+    
+    /* Item card (for rooms, amenities, gallery, testimonials) */
+    .item-card {
+      background: #fafafa;
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .item-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .item-card-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: #444;
+    }
+    .item-delete {
+      background: #fee;
+      color: #c0392b;
+      border: 1px solid #fcc;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .item-delete:hover { background: #c0392b; color: #fff; }
+    
+    .add-btn {
+      width: 100%;
+      padding: 14px;
+      background: #fff;
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #666;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .add-btn:hover { border-color: #b8924a; color: #b8924a; }
+    
+    .save-bar {
+      position: sticky;
+      bottom: 0;
+      background: #fff;
+      padding: 16px 20px;
+      border-top: 1px solid #e8e8e8;
+      margin: 30px -20px -30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .save-bar .info { font-size: 12px; color: #888; }
+    
+    .img-preview {
+      width: 80px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+    
+    @media (max-width: 640px) {
+      .form-row { grid-template-columns: 1fr; }
+      .admin-header { padding: 15px; flex-direction: column; gap: 10px; }
+      .container { padding: 0 12px; margin: 15px auto; }
+      .panel { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="admin-header">
+  <h1><i class="ti ti-settings"></i> Hotel Admin Panel</h1>
+  <div class="actions">
+    <button class="btn-admin btn-secondary" onclick="exportData()"><i class="ti ti-download"></i> Export</button>
+    <button class="btn-admin btn-secondary" onclick="document.getElementById('importFile').click()"><i class="ti ti-upload"></i> Import</button>
+    <input type="file" id="importFile" accept=".json,.js" style="display:none" onchange="importData(event)">
+    <a href="index.html" class="btn-admin btn-success" style="text-decoration:none; display:inline-block;"><i class="ti ti-eye"></i> Preview Site</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="alert alert-info" id="alertBox" style="display: block;">
+    <strong>How it works:</strong> Edit details below → click <em>Save Changes</em> → changes appear on your site instantly. Use <em>Export</em> to download data and <em>Import</em> to restore a backup.
+  </div>
+  
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('basic', this)">Basic Info</button>
+    <button class="tab" onclick="showTab('hero', this)">Hero & About</button>
+    <button class="tab" onclick="showTab('rooms', this)">Rooms</button>
+    <button class="tab" onclick="showTab('amenities', this)">Amenities</button>
+    <button class="tab" onclick="showTab('gallery', this)">Gallery</button>
+    <button class="tab" onclick="showTab('testimonials', this)">Reviews</button>
+    <button class="tab" onclick="showTab('contact', this)">Contact</button>
+  </div>
+  
+  <!-- BASIC -->
+  <div class="panel active" id="panel-basic">
+    <h2>Basic Information</h2>
+    <div class="field">
+      <label>Hotel Name</label>
+      <input type="text" id="d_name" placeholder="THE ROYAL PALACE">
+      <div class="hint">Shown in navbar, footer and browser title</div>
+    </div>
+    <div class="field">
+      <label>Tagline</label>
+      <input type="text" id="d_tagline" placeholder="EXPERIENCE LUXURY">
+    </div>
+  </div>
+  
+  <!-- HERO & ABOUT -->
+  <div class="panel" id="panel-hero">
+    <h2>Hero Section (Homepage)</h2>
+    <div class="field">
+      <label>Hero Title</label>
+      <input type="text" id="d_heroTitle">
+    </div>
+    <div class="field">
+      <label>Hero Subtitle</label>
+      <textarea id="d_heroSubtitle"></textarea>
+    </div>
+    <div class="field">
+      <label>Hero Background Image URL</label>
+      <input type="url" id="d_heroImage" oninput="previewImg('d_heroImage', 'p_hero')">
+      <img class="img-preview" id="p_hero" src="">
+      <div class="hint">Use Unsplash, Pexels, or any direct image URL (https://...)</div>
+    </div>
+    
+    <h2 style="margin-top: 30px;">About Section</h2>
+    <div class="field">
+      <label>About Title</label>
+      <input type="text" id="d_aboutTitle">
+    </div>
+    <div class="field">
+      <label>About Text (use blank line for new paragraph)</label>
+      <textarea id="d_aboutText" rows="6"></textarea>
+    </div>
+    <div class="field">
+      <label>About Image URL</label>
+      <input type="url" id="d_aboutImage" oninput="previewImg('d_aboutImage', 'p_about')">
+      <img class="img-preview" id="p_about" src="">
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Signature Name</label>
+        <input type="text" id="d_signature" placeholder="Vikram Mehrotra">
+      </div>
+      <div class="field">
+        <label>Signature Role</label>
+        <input type="text" id="d_signatureRole" placeholder="FOUNDER & CURATOR">
+      </div>
+    </div>
+  </div>
+  
+  <!-- ROOMS -->
+  <div class="panel" id="panel-rooms">
+    <h2>Rooms & Suites</h2>
+    <div id="roomsList"></div>
+    <button class="add-btn" onclick="addRoom()"><i class="ti ti-plus"></i> Add New Room</button>
+  </div>
+  
+  <!-- AMENITIES -->
+  <div class="panel" id="panel-amenities">
+    <h2>Amenities</h2>
+    <div id="amenitiesList"></div>
+    <button class="add-btn" onclick="addAmenity()"><i class="ti ti-plus"></i> Add Amenity</button>
+    <div class="hint" style="margin-top: 12px;">Find icon names at <a href="https://tabler.io/icons" target="_blank" style="color: #b8924a;">tabler.io/icons</a> (e.g., ti-pool, ti-wifi)</div>
+  </div>
+  
+  <!-- GALLERY -->
+  <div class="panel" id="panel-gallery">
+    <h2>Gallery Images</h2>
+    <div id="galleryList"></div>
+    <button class="add-btn" onclick="addGalleryImage()"><i class="ti ti-plus"></i> Add Image</button>
+  </div>
+  
+  <!-- TESTIMONIALS -->
+  <div class="panel" id="panel-testimonials">
+    <h2>Guest Testimonials</h2>
+    <div id="testimonialsList"></div>
+    <button class="add-btn" onclick="addTestimonial()"><i class="ti ti-plus"></i> Add Testimonial</button>
+  </div>
+  
+  <!-- CONTACT -->
+  <div class="panel" id="panel-contact">
+    <h2>Contact Information</h2>
+    <div class="form-row">
+      <div class="field">
+        <label>Phone</label>
+        <input type="tel" id="d_phone">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="d_email">
+      </div>
+    </div>
+    <div class="field">
+      <label>Address</label>
+      <input type="text" id="d_address">
+    </div>
+    <div class="field">
+      <label>Google Maps Embed URL</label>
+      <textarea id="d_mapEmbed" rows="3"></textarea>
+      <div class="hint">Go to Google Maps → Share → Embed → copy the src URL only</div>
+    </div>
+    
+    <h2 style="margin-top: 30px;">Social Media</h2>
+    <div class="form-row">
+      <div class="field">
+        <label>Facebook URL</label>
+        <input type="url" id="d_facebook">
+      </div>
+      <div class="field">
+        <label>Instagram URL</label>
+        <input type="url" id="d_instagram">
+      </div>
+    </div>
+    <div class="field">
+      <label>Twitter/X URL</label>
+      <input type="url" id="d_twitter">
+    </div>
+  </div>
+  
+  <!-- SAVE BAR -->
+  <div class="save-bar">
+    <div class="info"><i class="ti ti-device-floppy"></i> Changes are saved in your browser. Use <em>Export</em> to back up.</div>
+    <div style="display: flex; gap: 10px;">
+      <button class="btn-admin btn-danger" onclick="resetData()"><i class="ti ti-refresh"></i> Reset</button>
+      <button class="btn-admin btn-primary" onclick="saveData()"><i class="ti ti-check"></i> Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="alert alert-success" id="successAlert" style="position: fixed; top: 20px; right: 20px; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.15);"><i class="ti ti-check"></i> Saved successfully!</div>
+
+<script src="assets/data.js"></script>
+<script>
+  let workingData = JSON.parse(JSON.stringify(DATA));
+  
+  function showTab(name, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('panel-' + name).classList.add('active');
+  }
+  
+  function previewImg(inputId, imgId) {
+    const url = document.getElementById(inputId).value;
+    if (url) document.getElementById(imgId).src = url;
+  }
+  
+  function loadFormData() {
+    document.getElementById('d_name').value = workingData.name || '';
+    document.getElementById('d_tagline').value = workingData.tagline || '';
+    document.getElementById('d_heroTitle').value = workingData.heroTitle || '';
+    document.getElementById('d_heroSubtitle').value = workingData.heroSubtitle || '';
+    document.getElementById('d_heroImage').value = workingData.heroImage || '';
+    document.getElementById('p_hero').src = workingData.heroImage || '';
+    document.getElementById('d_aboutTitle').value = workingData.aboutTitle || '';
+    document.getElementById('d_aboutText').value = workingData.aboutText || '';
+    document.getElementById('d_aboutImage').value = workingData.aboutImage || '';
+    document.getElementById('p_about').src = workingData.aboutImage || '';
+    document.getElementById('d_signature').value = workingData.signature || '';
+    document.getElementById('d_signatureRole').value = workingData.signatureRole || '';
+    document.getElementById('d_phone').value = workingData.phone || '';
+    document.getElementById('d_email').value = workingData.email || '';
+    document.getElementById('d_address').value = workingData.address || '';
+    document.getElementById('d_mapEmbed').value = workingData.mapEmbed || '';
+    document.getElementById('d_facebook').value = workingData.facebook || '';
+    document.getElementById('d_instagram').value = workingData.instagram || '';
+    document.getElementById('d_twitter').value = workingData.twitter || '';
+    
+    renderRooms();
+    renderAmenities();
+    renderGallery();
+    renderTestimonials();
+  }
+  
+  function renderRooms() {
+    document.getElementById('roomsList').innerHTML = workingData.rooms.map((r, i) => `
+      <div class="item-card">
+        <div class="item-card-header">
+          <div class="item-card-title">Room ${i + 1}: ${r.name}</div>
+          <button class="item-delete" onclick="deleteRoom(${i})">Delete</button>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Name</label><input value="${r.name||''}" oninput="workingData.rooms[${i}].name = this.value"></div>
+          <div class="field"><label>Price (₹/night)</label><input value="${r.price||''}" oninput="workingData.rooms[${i}].price = this.value"></div>
+        </div>
+        <div class="field"><label>Description</label><textarea oninput="workingData.rooms[${i}].desc = this.value">${r.desc||''}</textarea></div>
+        <div class="field"><label>Image URL</label><input value="${r.image||''}" oninput="workingData.rooms[${i}].image = this.value"></div>
+        <div class="form-row" style="grid-template-columns: 1fr 1fr 1fr;">
+          <div class="field"><label>Size</label><input value="${r.size||''}" oninput="workingData.rooms[${i}].size = this.value"></div>
+          <div class="field"><label>Guests</label><input value="${r.guests||''}" oninput="workingData.rooms[${i}].guests = this.value"></div>
+          <div class="field"><label>Bed</label><input value="${r.bed||''}" oninput="workingData.rooms[${i}].bed = this.value"></div>
+        </div>
+      </div>
+    `).join('');
+  }
+  
+  function addRoom() {
+    workingData.rooms.push({ name: 'New Room', desc: 'Room description', price: '5,000', image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800', size: '30 sqm', guests: '2 Guests', bed: 'King Bed' });
+    renderRooms();
+  }
+  function deleteRoom(i) {
+    if (confirm('Delete this room?')) { workingData.rooms.splice(i, 1); renderRooms(); }
+  }
+  
+  function renderAmenities() {
+    document.getElementById('amenitiesList').innerHTML = workingData.amenities.map((a, i) => `
+      <div class="item-card">
+        <div class="item-card-header">
+          <div class="item-card-title"><i class="ti ${a.icon}"></i> ${a.name}</div>
+          <button class="item-delete" onclick="deleteAmenity(${i})">Delete</button>
+        </div>
+        <div class="form-row" style="grid-template-columns: 1fr 1fr 2fr;">
+          <div class="field"><label>Icon</label><input value="${a.icon||''}" oninput="workingData.amenities[${i}].icon = this.value"></div>
+          <div class="field"><label>Name</label><input value="${a.name||''}" oninput="workingData.amenities[${i}].name = this.value"></div>
+          <div class="field"><label>Description</label><input value="${a.desc||''}" oninput="workingData.amenities[${i}].desc = this.value"></div>
+        </div>
+      </div>
+    `).join('');
+  }
+  function addAmenity() {
+    workingData.amenities.push({ icon: 'ti-star', name: 'New Amenity', desc: 'Description' });
+    renderAmenities();
+  }
+  function deleteAmenity(i) {
+    if (confirm('Delete this amenity?')) { workingData.amenities.splice(i, 1); renderAmenities(); }
+  }
+  
+  function renderGallery() {
+    document.getElementById('galleryList').innerHTML = workingData.gallery.map((img, i) => `
+      <div class="item-card">
+        <div class="item-card-header">
+          <div class="item-card-title">Image ${i + 1}</div>
+          <button class="item-delete" onclick="deleteGalleryImage(${i})">Delete</button>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <img src="${img}" style="width: 100px; height: 70px; object-fit: cover; border-radius: 4px;">
+          <div style="flex: 1;"><input value="${img}" oninput="workingData.gallery[${i}] = this.value" style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;"></div>
+        </div>
+      </div>
+    `).join('');
+  }
+  function addGalleryImage() {
+    workingData.gallery.push('https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800');
+    renderGallery();
+  }
+  function deleteGalleryImage(i) {
+    if (confirm('Delete this image?')) { workingData.gallery.splice(i, 1); renderGallery(); }
+  }
+  
+  function renderTestimonials() {
+    document.getElementById('testimonialsList').innerHTML = workingData.testimonials.map((t, i) => `
+      <div class="item-card">
+        <div class="item-card-header">
+          <div class="item-card-title">Review ${i + 1}: ${t.author}</div>
+          <button class="item-delete" onclick="deleteTestimonial(${i})">Delete</button>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Author</label><input value="${t.author||''}" oninput="workingData.testimonials[${i}].author = this.value"></div>
+          <div class="field"><label>Stars (1-5)</label><input type="number" min="1" max="5" value="${t.stars||5}" oninput="workingData.testimonials[${i}].stars = parseInt(this.value)"></div>
+        </div>
+        <div class="field"><label>Quote</label><textarea oninput="workingData.testimonials[${i}].quote = this.value">${t.quote||''}</textarea></div>
+      </div>
+    `).join('');
+  }
+  function addTestimonial() {
+    workingData.testimonials.push({ quote: 'Great experience!', author: 'Guest Name', stars: 5 });
+    renderTestimonials();
+  }
+  function deleteTestimonial(i) {
+    if (confirm('Delete this testimonial?')) { workingData.testimonials.splice(i, 1); renderTestimonials(); }
+  }
+  
+  function saveData() {
+    // Pull all simple fields
+    workingData.name = document.getElementById('d_name').value;
+    workingData.tagline = document.getElementById('d_tagline').value;
+    workingData.heroTitle = document.getElementById('d_heroTitle').value;
+    workingData.heroSubtitle = document.getElementById('d_heroSubtitle').value;
+    workingData.heroImage = document.getElementById('d_heroImage').value;
+    workingData.aboutTitle = document.getElementById('d_aboutTitle').value;
+    workingData.aboutText = document.getElementById('d_aboutText').value;
+    workingData.aboutImage = document.getElementById('d_aboutImage').value;
+    workingData.signature = document.getElementById('d_signature').value;
+    workingData.signatureRole = document.getElementById('d_signatureRole').value;
+    workingData.phone = document.getElementById('d_phone').value;
+    workingData.email = document.getElementById('d_email').value;
+    workingData.address = document.getElementById('d_address').value;
+    workingData.mapEmbed = document.getElementById('d_mapEmbed').value;
+    workingData.facebook = document.getElementById('d_facebook').value;
+    workingData.instagram = document.getElementById('d_instagram').value;
+    workingData.twitter = document.getElementById('d_twitter').value;
+    
+    localStorage.setItem('hotelData', JSON.stringify(workingData));
+    
+    const alert = document.getElementById('successAlert');
+    alert.style.display = 'block';
+    setTimeout(() => alert.style.display = 'none', 2500);
+  }
+  
+  function resetData() {
+    if (!confirm('Reset all changes to default? This cannot be undone.')) return;
+    localStorage.removeItem('hotelData');
+    location.reload();
+  }
+  
+  function exportData() {
+    saveData();
+    const blob = new Blob([JSON.stringify(workingData, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'hotel-data.json';
+    a.click();
+  }
+  
+  function importData(evt) {
+    const file = evt.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        workingData = JSON.parse(e.target.result);
+        loadFormData();
+        saveData();
+        alert('Data imported successfully!');
+      } catch (err) {
+        alert('Invalid file: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+  
+  // Init
+  loadFormData();
+</script>
+</body>
+</html>

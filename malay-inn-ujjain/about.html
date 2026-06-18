@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Story — Hotel Malay Inn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/[email protected]/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div id="navbar-mount"></div>
+
+<section class="page-hero">
+  <div class="page-hero-img" id="pageHeroImg"></div>
+  <div class="page-hero-content">
+    <div class="page-hero-mark">— OUR STORY —</div>
+    <h1>Hospitality meets<br><em>tradition</em>.</h1>
+  </div>
+</section>
+
+<!-- ABOUT (full asymmetric) -->
+<section class="section section-warm">
+  <div class="about-section">
+    <div class="reveal-img about-image-wrap">
+      <img id="aboutImg" src="" alt="Hotel">
+      <div class="about-image-decor"></div>
+    </div>
+    <div class="about-text reveal">
+      <div class="section-num">01 — The Beginning</div>
+      <h2 class="section-title" id="aboutTitle"></h2>
+      <div id="aboutText"></div>
+      <div class="signature">
+        <span id="signature"></span>
+        <small id="signatureRole"></small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS DARK -->
+<section class="section section-ink">
+  <div class="container">
+    <div style="text-align: center; margin-bottom: 70px;" class="reveal">
+      <div class="section-num" style="justify-content: center;">02 — In Numbers</div>
+      <h2 class="section-title">Trusted by <em>thousands</em>.</h2>
+    </div>
+    <div class="stats-row reveal">
+      <div class="stat">
+        <div class="num">5<em>+</em></div>
+        <div class="label">YEARS</div>
+      </div>
+      <div class="stat">
+        <div class="num">20<em>+</em></div>
+        <div class="label">ROOMS</div>
+      </div>
+      <div class="stat">
+        <div class="num">10<em>k</em></div>
+        <div class="label">HAPPY GUESTS</div>
+      </div>
+      <div class="stat">
+        <div class="num">4.4<em>/5</em></div>
+        <div class="label">GUEST RATING</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="section section-warm">
+  <div class="container">
+    <div style="text-align: center; margin-bottom: 70px;" class="reveal">
+      <div class="section-num" style="justify-content: center;">03 — Our Values</div>
+      <h2 class="section-title">What we <em>believe</em> in.</h2>
+    </div>
+    <div class="amenities-row reveal">
+      <div class="amenity">
+        <div class="amenity-icon"><i class="ti ti-heart"></i></div>
+        <div class="amenity-name">Warm Welcome</div>
+        <div class="amenity-desc">Genuine hospitality always</div>
+      </div>
+      <div class="amenity">
+        <div class="amenity-icon"><i class="ti ti-star"></i></div>
+        <div class="amenity-name">Quality First</div>
+        <div class="amenity-desc">Excellence in every detail</div>
+      </div>
+      <div class="amenity">
+        <div class="amenity-icon"><i class="ti ti-location"></i></div>
+        <div class="amenity-name">Perfect Location</div>
+        <div class="amenity-desc">Heart of Ujjain city</div>
+      </div>
+      <div class="amenity">
+        <div class="amenity-icon"><i class="ti ti-shield-check"></i></div>
+        <div class="amenity-name">Guest Safety</div>
+        <div class="amenity-desc">Secure & comfortable stay</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="section section-cream">
+  <div class="container">
+    <div style="text-align: center; margin-bottom: 70px;" class="reveal">
+      <div class="section-num" style="justify-content: center;">04 — Our Rooms</div>
+      <h2 class="section-title">A closer <em>look</em>.</h2>
+    </div>
+    <div class="gallery-masonry reveal" id="gallery"></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-banner">
+  <div class="cta-banner-img" id="ctaImg"></div>
+  <h2>Ready to experience <em>comfort</em>?</h2>
+  <p>Book your stay at Hotel Malay Inn today.</p>
+  <a href="contact.html" class="btn">Check Availability <i class="ti ti-arrow-narrow-right"></i></a>
+</section>
+
+<div id="footer-mount"></div>
+
+<script src="assets/shared.js"></script>
+<script>
+  // ===== ALL DATA EMBEDDED HERE =====
+  const HOTEL_DATA = {
+    name: "HOTEL MALAY INN",
+    tagline: "UJJAIN — COMFORT & HOSPITALITY",
+    heroTitle: "Your perfect stay<br>awaits <em>here</em>.",
+    heroSubtitle: "Experience warm hospitality and comfortable accommodations in the sacred city of Ujjain. Perfectly located near Mahakaleshwar Temple.",
+    heroImage: "images/hotel-hero.jpg",
+    
+    aboutTitle: "Welcome to <em>Malay Inn</em>.",
+    aboutImage: "images/hotel-about.jpg",
+    aboutText: "Located just 7 minutes walk from the revered Mahakaleshwar Jyotirlinga Temple, Malay Inn is a 3-star hotel offering comfortable stays for pilgrims and travelers visiting Ujjain.\n\nOur hotel features six thoughtfully designed room categories to suit every guest's needs. With attentive service, modern amenities, and a convenient location in the Harifatak Bridge Chouraha area, we ensure every guest enjoys a memorable experience.\n\nWhether you're here for spiritual purposes or a relaxing getaway, Malay Inn provides the perfect base to explore the ancient city of Ujjain.",
+    signature: "Malay Inn Team",
+    signatureRole: "HOSPITALITY EXCELLENCE",
+    
+    phone: "+91 90094 44999",
+    email: "info@malayinn.com",
+    address: "Harifatak Bridge Chouraha, Ujjain\nMadhya Pradesh 456006, India",
+    mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3612.5633894622483!2d75.77509!3d23.18122!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396371234567!2sHotel%20Malay%20Inn%20Ujjain!5e0!3m2!1sen!2sin!4v1700000000000",
+    
+    facebook: "#",
+    instagram: "#",
+    twitter: "#",
+    
+    // GALLERY - ONLY 8 IMAGES
+    gallery: [
+      "images/hotel-hero.jpg",
+      "images/deluxe-room.jpg",
+      "images/deluxe-suite.jpg",
+      "images/triple-bed.jpg",
+      "images/family-studio.jpg",
+      "images/family-suite.jpg",
+      "images/premium-double.jpg",
+      "images/hotel-about.jpg"
+    ]
+  };
+
+  const DATA = HOTEL_DATA;
+
+  // Initialize page
+  document.getElementById('navbar-mount').innerHTML = renderNavbar('about');
+  document.getElementById('footer-mount').innerHTML = renderFooter();
+  
+  // Load images
+  document.getElementById('pageHeroImg').style.backgroundImage = `url('${DATA.aboutImage}')`;
+  document.getElementById('aboutImg').src = DATA.aboutImage;
+  document.getElementById('aboutTitle').innerHTML = DATA.aboutTitle;
+  document.getElementById('aboutText').innerHTML = DATA.aboutText.split('\n\n').map(p => `<p>${p}</p>`).join('');
+  document.getElementById('signature').textContent = DATA.signature || '';
+  document.getElementById('signatureRole').textContent = DATA.signatureRole || '';
+  document.getElementById('ctaImg').style.backgroundImage = `url('${DATA.heroImage}')`;
+  
+  // Load gallery
+  document.getElementById('gallery').innerHTML = DATA.gallery.map(img => `
+    <div class="gallery-item">
+      <img src="${img}" alt="Hotel Room" loading="lazy">
+    </div>
+  `).join('');
+  
+  setupReveal();
+</script>
+</body>
+</html>

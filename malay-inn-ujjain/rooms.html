@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stay — Aurelia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/[email protected]/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div id="navbar-mount"></div>
+
+<section class="page-hero">
+  <div class="page-hero-img" id="pageHeroImg"></div>
+  <div class="page-hero-content">
+    <div class="page-hero-mark">— ACCOMMODATIONS —</div>
+    <h1>Rooms &<br><em>retreats</em>.</h1>
+  </div>
+</section>
+
+<section class="section section-warm">
+  <div class="container intro-grid reveal" style="margin-bottom: 100px;">
+    <div>
+      <div class="section-num">A — The Selection</div>
+      <h2 class="section-title">Each one, <em>singular</em>.</h2>
+    </div>
+    <div>
+      <p class="section-subtitle" style="font-size: 17px; color: var(--charcoal);">
+        No two rooms at Aurelia are alike. Each is a study in restraint — antique furniture sourced from estate sales, hand-loomed throws, and books selected by our in-house librarian. You don't choose a room. You meet one.
+      </p>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="rooms-editorial" id="allRooms"></div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <div class="cta-banner-img" id="ctaImg"></div>
+  <h2>Need help <em>deciding</em>?</h2>
+  <p>Speak with our reservations team. They'll match you with the right room.</p>
+  <a href="contact.html" class="btn">Get In Touch <i class="ti ti-arrow-narrow-right"></i></a>
+</section>
+
+<div id="footer-mount"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shared.js"></script>
+<script>
+  document.getElementById('navbar-mount').innerHTML = renderNavbar('rooms');
+  document.getElementById('footer-mount').innerHTML = renderFooter();
+  
+  document.getElementById('pageHeroImg').style.backgroundImage = `url('${DATA.heroImage}')`;
+  document.getElementById('ctaImg').style.backgroundImage = `url('${DATA.aboutImage}')`;
+  
+  document.getElementById('allRooms').innerHTML = DATA.rooms.map((r, i) => `
+    <article class="room-row reveal">
+      <div class="room-row-image reveal-img">
+        <img src="${r.image}" alt="${r.name}">
+      </div>
+      <div class="room-row-content">
+        <div class="room-num">${String(i + 1).padStart(2, '0')}</div>
+        <h2 class="room-name">${r.name}</h2>
+        <p class="room-desc">${r.desc}</p>
+        <div class="room-meta">
+          <div class="room-meta-item">
+            <small>SIZE</small>
+            <strong>${r.size}</strong>
+          </div>
+          <div class="room-meta-item">
+            <small>OCCUPANCY</small>
+            <strong>${r.guests}</strong>
+          </div>
+          <div class="room-meta-item">
+            <small>BED</small>
+            <strong>${r.bed}</strong>
+          </div>
+        </div>
+        <div class="room-price-line">
+          <div class="price">₹${r.price}<small>/ night</small></div>
+        </div>
+        <a href="contact.html" class="btn">Reserve <i class="ti ti-arrow-narrow-right"></i></a>
+      </div>
+    </article>
+  `).join('');
+  
+  setupReveal();
+</script>
+</body>
+</html>
