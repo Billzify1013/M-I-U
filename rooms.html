@@ -9,6 +9,90 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/[email protected]/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="assets/style.css">
+
+  <style>
+    /* Room Gallery Modal — inline, no separate css file */
+    .room-gallery-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .room-gallery-modal.active { display: flex; }
+    .room-gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(20, 18, 16, 0.85);
+      backdrop-filter: blur(4px);
+    }
+    .room-gallery-box {
+      position: relative;
+      z-index: 1;
+      background: #fdfbf8;
+      width: min(640px, 92vw);
+      max-height: 86vh;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: galleryIn 0.35s ease;
+    }
+    @keyframes galleryIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .room-gallery-header {
+      padding: 24px 28px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      flex-shrink: 0;
+    }
+    .room-gallery-header h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 26px;
+      font-weight: 400;
+      margin: 0;
+    }
+    .room-gallery-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      z-index: 2;
+      transition: background 0.2s;
+    }
+    .room-gallery-close:hover { background: #fff; }
+    .room-gallery-scroll {
+      overflow-y: auto;
+      padding: 20px 28px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .room-gallery-scroll img {
+      width: 100%;
+      border-radius: 4px;
+      display: block;
+      object-fit: cover;
+    }
+    body.gallery-open { overflow: hidden; }
+
+    @media (max-width: 640px) {
+      .room-gallery-box { width: 94vw; max-height: 90vh; }
+      .room-gallery-header { padding: 18px 20px 14px; }
+      .room-gallery-scroll { padding: 16px 20px 22px; }
+    }
+  </style>
 </head>
 <body>
 
@@ -47,6 +131,18 @@
   <a href="contact.html" class="btn">Get In Touch <i class="ti ti-arrow-narrow-right"></i></a>
 </section>
 
+<!-- Room Gallery Modal -->
+<div class="room-gallery-modal" id="roomGalleryModal">
+  <div class="room-gallery-overlay" id="roomGalleryOverlay"></div>
+  <div class="room-gallery-box">
+    <button class="room-gallery-close" id="roomGalleryClose"><i class="ti ti-x"></i></button>
+    <div class="room-gallery-header">
+      <h3 id="roomGalleryTitle"></h3>
+    </div>
+    <div class="room-gallery-scroll" id="roomGalleryScroll"></div>
+  </div>
+</div>
+
 <div id="footer-mount"></div>
 
 <script src="assets/data.js"></script>
@@ -60,7 +156,7 @@
   
   document.getElementById('allRooms').innerHTML = DATA.rooms.map((r, i) => `
     <article class="room-row reveal">
-      <div class="room-row-image reveal-img">
+      <div class="room-row-image reveal-img" data-room-index="${i}">
         <img src="${r.image}" alt="${r.name}">
       </div>
       <div class="room-row-content">
@@ -69,16 +165,16 @@
         <p class="room-desc">${r.desc}</p>
         <div class="room-meta">
           <div class="room-meta-item">
+            <small>PRICE</small>
+            <strong>₹${r.price}</strong>
+          </div>
+          <div class="room-meta-item">
             <small>SIZE</small>
             <strong>${r.size}</strong>
           </div>
           <div class="room-meta-item">
-            <small>OCCUPANCY</small>
+            <small>GUESTS</small>
             <strong>${r.guests}</strong>
-          </div>
-          <div class="room-meta-item">
-            <small>BED</small>
-            <strong>${r.bed}</strong>
           </div>
         </div>
         <div class="room-price-line">
@@ -90,6 +186,52 @@
   `).join('');
   
   setupReveal();
+
+  // ===== Room Gallery Popup =====
+  const galleryModal = document.getElementById('roomGalleryModal');
+  const galleryScroll = document.getElementById('roomGalleryScroll');
+  const galleryTitle = document.getElementById('roomGalleryTitle');
+  const MAX_IMAGES = 5;
+
+  function openRoomGallery(room) {
+    // jis folder me room ki main image hai, gallery images usi folder se uthayega
+    const lastSlash = room.image.lastIndexOf('/');
+    const folder = lastSlash !== -1 ? room.image.substring(0, lastSlash + 1) : '';
+    const cat = room.cat;
+
+    galleryTitle.textContent = room.name;
+    galleryScroll.innerHTML = '';
+
+    for (let n = 1; n <= MAX_IMAGES; n++) {
+      const img = document.createElement('img');
+      img.src = `${folder}${cat}-${n}.jpg`;
+      img.alt = `${room.name} ${n}`;
+      img.onerror = function () { this.remove(); };
+      galleryScroll.appendChild(img);
+    }
+
+    galleryModal.classList.add('active');
+    document.body.classList.add('gallery-open');
+  }
+
+  function closeRoomGallery() {
+    galleryModal.classList.remove('active');
+    document.body.classList.remove('gallery-open');
+  }
+
+  document.getElementById('roomGalleryClose').addEventListener('click', closeRoomGallery);
+  document.getElementById('roomGalleryOverlay').addEventListener('click', closeRoomGallery);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeRoomGallery();
+  });
+
+  document.querySelectorAll('[data-room-index]').forEach((el) => {
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.getAttribute('data-room-index'), 10);
+      openRoomGallery(DATA.rooms[idx]);
+    });
+  });
 </script>
 </body>
 </html>

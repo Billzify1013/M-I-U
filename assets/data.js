@@ -25,56 +25,62 @@ const HOTEL_DATA = {
     {
       name: "Deluxe Room",
       desc: "Comfortable and spacious room with modern amenities, air-conditioning, and a private bathroom. Ideal for budget-conscious travelers.",
-      price: "2,310",
+      price: "2,100",
       image: "images/deluxe-room.jpg",
-      size: "30 sqm",
-      guests: "2 Guests",
+      cat: "deluxe-room",
+      size: "140 sq ft",
+      guests: "2",
       bed: "Double Bed"
     },
     {
       name: "Deluxe Suite Room",
       desc: "Upgraded suite with additional living space, premium bedding, and enhanced bathroom facilities for a more luxurious experience.",
-      price: "3,200",
+      price: "2,500",
       image: "images/deluxe-suite.jpg",
-      size: "42 sqm",
-      guests: "2-3 Guests",
+      cat: "deluxe-suite",
+      size: "160 sq ft",
+      guests: "2-3",
       bed: "King Bed"
     },
     {
-      name: "Deluxe Triple Bed Room",
+      name: "Deluxe Triple Bed",
       desc: "Perfect for small families or groups, featuring three comfortable beds and all essential amenities for a pleasant stay.",
-      price: "4,000",
+      price: "2,300",
       image: "images/triple-bed.jpg",
-      size: "38 sqm",
-      guests: "3 Guests",
+      cat: "deluxe-triple",
+      size: "210 sq ft",
+      guests: "3",
       bed: "3 Single Beds"
     },
     {
       name: "Family Studio Room",
       desc: "Spacious studio room designed for families with a separate living area, kitchenette, and comfortable sleeping arrangements.",
-      price: "4,800",
+      price: "4,500",
       image: "images/family-studio.jpg",
-      size: "50 sqm",
-      guests: "4 Guests",
-      bed: "Double + Single Bed"
+      cat: "family-studio",
+      size: "300 sq ft",
+      guests: "4",
+      bed: "Double + Single"
     },
     {
-      name: "Family Suite 3+1",
-      desc: "Our premium family suite offering three bedrooms plus one additional room, perfect for large families or group travelers.",
-      price: "6,500",
+      name: "Family Suite Room",
+      desc: "Premium family suite offering spacious accommodations, perfect for large families or group travelers seeking comfort.",
+      price: "2,500",
       image: "images/family-suite.jpg",
-      size: "75 sqm",
-      guests: "5-6 Guests",
+      cat: "family-suite",
+      size: "210 sq ft",
+      guests: "4-5",
       bed: "Multiple Beds"
     },
     {
-      name: "Premium Double Bed",
+      name: "Premium Triple Bed",
       desc: "Top-tier accommodation with premium furnishings, premium bedding, and exclusive amenities for the most discerning guests.",
-      price: "5,500",
+      price: "3,500",
       image: "images/premium-double.jpg",
-      size: "45 sqm",
-      guests: "2 Guests",
-      bed: "King Bed"
+      cat: "premium-three-bed",
+      size: "250 sq ft",
+      guests: "3",
+      bed: "King + Single"
     }
   ],
   

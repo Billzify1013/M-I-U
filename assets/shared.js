@@ -19,8 +19,10 @@ function renderNavbar(activePage) {
         ${links}
         <li><a href="contact.html" class="nav-book-btn">RESERVE</a></li>
       </ul>
-      <button class="nav-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
-        <i class="ti ti-menu-2"></i>
+      <button class="nav-toggle" onclick="document.getElementById('navLinks').classList.toggle('open'); this.classList.toggle('active')" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
     </nav>
   `;
